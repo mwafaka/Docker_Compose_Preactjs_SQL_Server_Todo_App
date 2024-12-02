@@ -35,16 +35,18 @@ Frontend: Preact.js
 Backend: Custom backend logic (Node.js, Python, or any preferred framework)
 Database: Microsoft SQL Server
 Containerization: Docker
-🛠 Environment Variables
+
+
+## 🛠 Environment Variables
 Define your environment variables in a .env file for easy configuration:
 
-env
-Copy code
+```bash
+
 DB_USER=your_db_username
 DB_PASSWORD=your_db_password
 DB_NAME=todo_app
 APP_PORT=5000
-
+```
 
 ## 📖 How It Works
 
