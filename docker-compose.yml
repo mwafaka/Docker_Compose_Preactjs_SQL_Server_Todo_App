@@ -1,0 +1,44 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: ${DOCKER_CONTAINER}
+    environment:
+      ACCEPT_EULA: "Y"                 # Required to accept the End User License Agreement
+      SA_PASSWORD: ${DOCKER_PASS}     # Use a secure password for the 'sa' (System Administrator) user
+    ports:
+      - "1433:1433"                    # SQL Server listens on port 1433 by default
+    volumes:
+      - sqlserver_data:/var/opt/mssql  # Data persistence for SQL Server
+    networks:
+      - todo-network
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: ${DOKCER_HOST}               # Name of the SQL Server container
+      DB_USER: ${DOCKER_USER}                     # The default SQL Server admin user
+      DB_PASSWORD: ${DOCKER_PASS}      # Use the same password as in the SQL Server container
+      DB_NAME: ${DOCKER_NAME}                # The database name
+    depends_on:
+      - sqlserver                      # Ensure the SQL Server container starts first
+    networks:
+      - todo-network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - todo-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  todo-network:
